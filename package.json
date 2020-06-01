@@ -1,0 +1,24 @@
+{
+  "name": "myday-back",
+  "version": "1.0.0",
+  "description": "MyDay Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dridripy/myday-back.git"
+  },
+  "author": "Adrien Chantrel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dridripy/myday-back/issues"
+  },
+  "homepage": "https://github.com/Dridripy/myday-back#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}
