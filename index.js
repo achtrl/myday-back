@@ -17,6 +17,8 @@ db.once("open", () => {
   console.log("Connected to Database !");
 });
 
+app.use(express.json());
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(

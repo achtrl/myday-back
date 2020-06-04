@@ -1,4 +1,5 @@
 const {google} = require("googleapis");
+const axios = require("axios");
 
 require("dotenv").config();
 
@@ -25,7 +26,7 @@ function createConnection() {
 /**
  * This scope tells google what information we want to request.
  */
-const defaultScope = ["https://www.googleapis.com/auth/userinfo.email"];
+const defaultScope = ["https://www.googleapis.com/auth/userinfo.profile"];
 
 /**
  * Get a url which will open the google sign-in page and request access to the scope provided (such as calendar events).
@@ -47,8 +48,57 @@ function urlGoogle() {
   return url;
 }
 
+/**
+ * Create access token from code
+ */
+
+async function getAccessTokenFromCode(code) {
+  return await axios.post("https://oauth2.googleapis.com/token", {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: process.env.GOOGLE_CLIENT_REDIRECT,
+      grant_type: 'authorization_code',
+      code
+  })
+  .then((response) => {
+    // console.log(response); // { access_token, expires_in, token_type, refresh_token }
+    return response;
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+  
+};
+
+async function getGoogleUserInfos(access_token) {
+  return await axios.get("https://www.googleapis.com/oauth2/v1/userinfo?alt=json", {
+    headers: {
+      Authorization: 'Bearer' + access_token,
+    }
+  })
+  .then((response) => {
+    return response;
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+};
+
+/**
+ * Google route
+ */
+
 router.get('/', (req, res) => {
   res.send(urlGoogle());
+});
+
+router.post('/', (req,res) => {
+  const code = req.body.code;
+  getAccessTokenFromCode(code).then((response) => {
+    getGoogleUserInfos(response.data.access_token).then((response) => {
+      console.log(response.data);
+    })
+  })
 });
 
 module.exports = router;
