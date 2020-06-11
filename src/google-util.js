@@ -26,7 +26,10 @@ function createConnection() {
 /**
  * This scope tells google what information we want to request.
  */
-const defaultScope = ["https://www.googleapis.com/auth/userinfo.profile"];
+const defaultScope = [
+  "https://www.googleapis.com/auth/userinfo.profile",
+  "https://www.googleapis.com/auth/calendar.readonly"
+];
 
 /**
  * Get a url which will open the google sign-in page and request access to the scope provided (such as calendar events).
@@ -84,6 +87,20 @@ async function getGoogleUserInfos(access_token) {
   })
 };
 
+async function getGoogleCalendarEvents(access_token) {
+  return await axios.get("https://www.googleapis.com/calendar/v3/users/me/calendarList", {
+    headers: {
+      Authorization: 'Bearer' + access_token,
+    }
+  })
+  .then((response) => {
+    return response;
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+}
+
 /**
  * Google route
  */
@@ -95,8 +112,12 @@ router.get('/', (req, res) => {
 router.post('/', (req,res) => {
   const code = req.body.code;
   getAccessTokenFromCode(code).then((response) => {
-    getGoogleUserInfos(response.data.access_token).then((response) => {
-      console.log(response.data);
+    // getGoogleUserInfos(response.data.access_token).then((response) => {
+    //   console.log(response.data);
+    // })
+    // console.log(response.data);
+    getGoogleCalendarEvents(response.data.access_token).then((response) => {
+      console.log(response);
     })
   })
 });
