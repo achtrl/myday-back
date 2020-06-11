@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
 });
 
 const airQualityRouter = require("./src/routes/airQualityRoute")
-app.use('/airQuality', airQualityRouter)
+app.use('/api/airQuality', airQualityRouter)
 
 const googleRouter = require("./src/google-util");
 app.use("/google", googleRouter);
