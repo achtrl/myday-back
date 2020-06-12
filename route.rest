@@ -2,4 +2,4 @@ GET http://localhost:8080/airQuality
 
 ###
 
-GET http://localhost:8080/weather
+GET http://localhost:8080/api/weather
