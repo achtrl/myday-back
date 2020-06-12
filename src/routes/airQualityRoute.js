@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
   try {
     const airQualityData = await airQuality.find();
     const airQualityDescription = getAirQuality(airQualityData[0].toJSON());
-    res.json({ airQuality: airQualityDescription });
+    res.json(airQualityDescription);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
