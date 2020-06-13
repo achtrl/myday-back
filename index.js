@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
 });
 
 const airQualityRouter = require("./src/routes/airQualityRoute")
-app.use('/api/airQuality', airQualityRouter)
+app.use('/api/airQuality', airQualityRouter);
 
 const weatherRouter = require("./src/routes/weatherRoute")
 app.use('/api/weather', weatherRouter);
