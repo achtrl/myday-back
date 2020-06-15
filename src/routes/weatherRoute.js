@@ -39,32 +39,43 @@ function mean(data) {
 function getWeatherDescription(obj) {
     var descriptions = {
         wind_speed: [],
-        weather_main: []
+        weather_main: [],
+        time: []
     }
-    var i = 0
-    while (obj.hourly[i].time != 0) {
+    const hoursTilMidnight = 24 - obj.hourly[0].time
+    for (var i = 0; i<hoursTilMidnight; i++){
         descriptions.weather_main.push(obj.hourly[i].weather_infos[0].weather_main)
         descriptions.wind_speed.push(obj.hourly[i].wind_speed)
-        i++
-
+        descriptions.time.push(obj.hourly[i].time)
     }
     return descriptions
-
 }
 
 function getMainWeatherDescription(infos) {
+    var data = {
+        weather_main: '',
+        rainTime: []
+    }
     if (mean(infos.wind_speed) > 14) {
-        return 'Wind'
+        data.weather_main = 'Wind'
     }
     else if (infos.weather_main.includes('Rain')) {
-        return 'Rain'
+        var index = infos.weather_main.indexOf('Rain')
+        var rainTime = []
+        while (index != -1) {
+            rainTime.push(infos.time[index])
+            index = infos.weather_main.indexOf('Rain', index + 1)
+        }
+        data.weather_main = 'Rain'
+        data.rainTime = rainTime
     }
     else if (infos.weather_main.includes('Snow')) {
-        return 'Snow'
+        data.weather_main = 'Snow'
     }
     else {
-        return 'Clear'
+        data.weather_main = 'Clear'
     }
+    return data
 }
 function getTemperatureDescription(temperature) {
     if (temperature > 20) {
@@ -81,9 +92,39 @@ function getTemperatureDescription(temperature) {
     }
 }
 
+function rainTime(infos) {
+    var rainPeriod = {
+        morning: false,
+        afternoon: false,
+        day: false
+    }
+    for (var i = 0; i < infos.rainTime.length; i++) {
+        if (infos.rainTime[i] < 12) {
+            rainPeriod.morning = true
+        }
+        else {
+            rainPeriod.afternoon = true
+        }
+    }
+    if (rainPeriod.morning == true && rainPeriod.afternoon == true) {
+        rainPeriod.day = true
+    }
+    if (rainPeriod.day == true){
+        return 'Pluie prévue toute la journée'
+    } 
+    else if (rainPeriod.morning == true){
+        return 'Pluie prévue le matin'
+    } 
+    else if (rainPeriod.afternoon == true){
+        return 'Pluie prévue l\'après-midi'
+    }
+
+}
+
+
 function getOutfit(description, temperature) {
     var outfit = ''
-    switch (description + "-" + temperature) {
+    switch (description.weather_main + "-" + temperature) {
         case "Snow-Moderate":
             outfit = outfits.snowy.moderate
             break
@@ -134,17 +175,21 @@ function getOutfit(description, temperature) {
 }
 
 function getFinalOutfit(weatherData) {
+    const outfitAndPrediction = {}
     const temperatures = getTemperature(weatherData)
     const meanTemperature = mean(temperatures)
     const descriptions = getWeatherDescription(weatherData)
     const mainWeatherDescription = getMainWeatherDescription(descriptions)
     const temperatureDescription = getTemperatureDescription(meanTemperature)
     const outfit = getOutfit(mainWeatherDescription, temperatureDescription)
+    outfitAndPrediction.outfit = outfit
+    const rainPeriod = rainTime(mainWeatherDescription)
+    outfitAndPrediction.rainPeriod = rainPeriod
 
-    return outfit
+    return outfitAndPrediction
 }
-function getFrenchDescription(description,wind_speed) {
-    if (wind_speed>14){
+function getFrenchDescription(description, wind_speed) {
+    if (wind_speed > 14) {
         return 'Venteux'
     }
     switch (description) {
@@ -154,16 +199,18 @@ function getFrenchDescription(description,wind_speed) {
             return 'Ensoleillé'
         case "Rain":
             return 'Pluvieux'
-        default : 
-            return 'Ensoleillé'   
+        default:
+            return 'Ensoleillé'
     }
 }
 
 function getData(weatherData) {
+    const outfitAndPrediction = getFinalOutfit(weatherData)
     return data = {
         temperature: Math.round(weatherData.current.temp),
-        description: getFrenchDescription(weatherData.current.weather_infos[0].weather_main,weatherData.current.wind_speed),
-        outfit: getFinalOutfit(weatherData)
+        description: getFrenchDescription(weatherData.current.weather_infos[0].weather_main, weatherData.current.wind_speed),
+        outfit: outfitAndPrediction.outfit,
+        prediction: outfitAndPrediction.rainPeriod
     }
 
 }
