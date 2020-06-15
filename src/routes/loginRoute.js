@@ -3,6 +3,7 @@ const router = express.Router();
 const GoogleUtil = require("../google-util");
 
 const userModel = require("../models/user");
+const user = require("../models/user");
 
 const googleUtil = new GoogleUtil();
 
@@ -23,8 +24,8 @@ router.post("/", (req, res) => {
       }
       return data;
     })
-    .then((data) => {
-      userData.id = Number(data[0].id);
+    .then( async (data) => {
+      userData.id = data[0].id;
       userData.first_name = data[0].given_name;
       userData.last_name = data[0].family_name;
       userData.longitude = req.body.longitude;
@@ -34,18 +35,19 @@ router.post("/", (req, res) => {
       for (event of data[1].items) {
         events.push({
           id: event.id,
-          summary: event.summary,
-          location: event.location,
-          start: event.start.dateTime
+          summary: event.summary ? event.summary : "",
+          location: event.location ? event.location : "",
+          start: event.start.dateTime ? event.start.dateTime : ""
         })
       }
       userData.events = events;
-      
-      const user = new userModel(userData);
-      userModel.deleteMany({}, () => {
-        console.log('Deleted old user');
-      })
-      user.save();
+
+      const filter = { id: data[0].id }
+      const update = userData;
+
+      await userModel.findOneAndUpdate(filter, update, {
+        upsert: true
+      });
     })
   });
 });
