@@ -34,8 +34,8 @@ app.use('/api/airQuality', airQualityRouter);
 const weatherRouter = require("./src/routes/weatherRoute")
 app.use('/api/weather', weatherRouter);
 
-const googleRouter = require("./src/google-util");
-app.use("/google", googleRouter);
+const googleRouter = require("./src/routes/loginRoute");
+app.use("/api/login", googleRouter);
 
 app.listen(8080, () => {
   console.log("SERVER ON");
