@@ -78,13 +78,13 @@ class googleUtil {
       .get(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
         headers: {
           Authorization: `Bearer ${access_token}`,
-          Paramaters: {
-            orderBy: 'startTime',
-            singleEvents: 'true',
-            timeMin: `${start.toISOString()}`,
-            timeMax: `${end.toISOString()}`
-          }
         },
+        params: {
+          orderBy: 'startTime',
+          singleEvents: 'true',
+          timeMin: `${start.toISOString()}`,
+          timeMax: `${end.toISOString()}`
+        }
       })
       .then((response) => {
         return response;
