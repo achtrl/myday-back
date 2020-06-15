@@ -190,17 +190,17 @@ function getFinalOutfit(weatherData) {
 }
 function getFrenchDescription(description, wind_speed) {
     if (wind_speed > 14) {
-        return 'Venteux'
+        return 'venteux'
     }
     switch (description) {
         case "Snow":
-            return 'Enneigé'
+            return 'enneigé'
         case "Clear":
-            return 'Ensoleillé'
+            return 'ensoleillé'
         case "Rain":
-            return 'Pluvieux'
+            return 'pluvieux'
         default:
-            return 'Ensoleillé'
+            return 'ensoleillé'
     }
 }
 
