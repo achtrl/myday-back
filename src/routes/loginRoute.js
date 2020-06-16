@@ -3,6 +3,7 @@ const router = express.Router();
 const GoogleUtil = require("../google-util");
 
 const userModel = require("../models/user");
+const user = require("../models/user");
 
 const googleUtil = new GoogleUtil();
 
@@ -23,8 +24,10 @@ router.post("/", (req, res) => {
       }
       return data;
     })
+
     .then(async (data) => {
       userData.googleId = data[0].id;
+
       userData.first_name = data[0].given_name;
       userData.last_name = data[0].family_name;
       userData.longitude = req.body.longitude;
@@ -41,6 +44,7 @@ router.post("/", (req, res) => {
       userData.events = events;
       
       const filter = { googleId: data[0].id }
+
       const update = userData;
 
       await userModel.findOneAndUpdate(filter, update, {
