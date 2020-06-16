@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const eventSchema = require('./event');
 
 const userSchema = mongoose.Schema({
-    id: String,
+    googleId: String,
     first_name: String,
     last_name: String,
     longitude: Number,

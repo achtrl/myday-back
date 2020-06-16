@@ -24,8 +24,10 @@ router.post("/", (req, res) => {
       }
       return data;
     })
-    .then( async (data) => {
-      userData.id = data[0].id;
+
+    .then(async (data) => {
+      userData.googleId = data[0].id;
+
       userData.first_name = data[0].given_name;
       userData.last_name = data[0].family_name;
       userData.longitude = req.body.longitude;
@@ -34,15 +36,15 @@ router.post("/", (req, res) => {
       var events = new Array();
       for (event of data[1].items) {
         events.push({
-          id: event.id,
-          summary: event.summary ? event.summary : "",
-          location: event.location ? event.location : "",
-          start: event.start.dateTime ? event.start.dateTime : ""
+          summary: event.summary,
+          location: event.location,
+          start: event.start.dateTime
         })
       }
       userData.events = events;
+      
+      const filter = { googleId: data[0].id }
 
-      const filter = { id: data[0].id }
       const update = userData;
 
       await userModel.findOneAndUpdate(filter, update, {

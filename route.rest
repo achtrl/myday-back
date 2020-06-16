@@ -3,3 +3,9 @@ GET http://localhost:8080/airQuality
 ###
 
 GET http://localhost:8080/api/weather
+
+
+###
+
+GET http://localhost:8080/api/events
+?googleId=109060792014143726304
