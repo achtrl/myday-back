@@ -70,7 +70,6 @@ class googleUtil {
 
   async getGoogleCalendarEvents(access_token) {
     var start = new Date();
-    start.setHours(0, 0, 0, 0);
     var end = new Date();
     end.setHours(23, 59, 59, 999);
 
@@ -78,13 +77,13 @@ class googleUtil {
       .get(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
         headers: {
           Authorization: `Bearer ${access_token}`,
-          Paramaters: {
-            orderBy: 'startTime',
-            singleEvents: 'true',
-            timeMin: `${start.toISOString()}`,
-            timeMax: `${end.toISOString()}`
-          }
         },
+        params: {
+          orderBy: 'startTime',
+          singleEvents: 'true',
+          timeMin: `${start.toISOString()}`,
+          timeMax: `${end.toISOString()}`
+        }
       })
       .then((response) => {
         return response;

@@ -9,6 +9,7 @@ mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+mongoose.set('useFindAndModify', false);
 const db = mongoose.connection;
 db.on("error", (err) => {
   console.log(err);
@@ -34,8 +35,11 @@ app.use('/api/airQuality', airQualityRouter);
 const weatherRouter = require("./src/routes/weatherRoute")
 app.use('/api/weather', weatherRouter);
 
-const googleRouter = require("./src/routes/loginRoute");
-app.use("/api/login", googleRouter);
+const loginRouter = require("./src/routes/loginRoute");
+app.use("/api/login", loginRouter);
+
+const eventsRouter = require('./src/routes/eventsRoute');
+app.use("/api/events", eventsRouter);
 
 app.listen(8080, () => {
   console.log("SERVER ON");
