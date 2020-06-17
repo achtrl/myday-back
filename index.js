@@ -41,6 +41,9 @@ app.use("/api/login", loginRouter);
 const eventsRouter = require('./src/routes/eventsRoute');
 app.use("/api/events", eventsRouter);
 
+const userRouter = require('./src/routes/userRoute');
+app.use('/api/user', userRouter);
+
 app.listen(8080, () => {
   console.log("SERVER ON");
 });
