@@ -199,8 +199,14 @@ function getFrenchDescription(description, wind_speed) {
             return 'ensoleillé'
         case "Rain":
             return 'pluvieux'
+        case "Thunderstorm":
+            return 'orageux'
+        case "Clouds":
+            return 'nuageux'
+        case "Drizzle":
+            return 'bruineux'
         default:
-            return 'ensoleillé'
+            return 'nuageux'
     }
 }
 
@@ -212,7 +218,7 @@ function getData(weatherData) {
         outfit: outfitAndPrediction.outfit,
         prediction: outfitAndPrediction.rainPeriod
     }
-
+s
 }
 
 

@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+
 function getAirQuality(obj) {
   var airQualityData = {
     value: 0,
@@ -39,4 +40,19 @@ function getAirQuality(obj) {
   return airQualityData;
 }
 
-module.exports = router;
+async function sendData(){
+  const airQualityData = await airQuality.find();
+  const airQualityDescription = getAirQuality(airQualityData[0].toJSON());
+  return airQualityDescription
+}
+
+
+
+module.exports = {
+  router : router,
+  getAirQualityData : sendData
+};
+
+
+ 
+

@@ -28,7 +28,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-const airQualityRouter = require("./src/routes/airQualityRoute")
+
+const airQualityModule = require("./src/routes/airQualityRoute")
+const airQualityRouter = airQualityModule.router
 app.use('/api/airQuality', airQualityRouter);
 
 const weatherRouter = require("./src/routes/weatherRoute")
@@ -36,6 +38,9 @@ app.use('/api/weather', weatherRouter);
 
 const googleRouter = require("./src/routes/loginRoute");
 app.use("/api/login", googleRouter);
+
+const directionsRouter = require("./src/routes/directionsRoute");
+app.use("/api/directions", directionsRouter);
 
 app.listen(8080, () => {
   console.log("SERVER ON");
