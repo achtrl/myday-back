@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -28,6 +29,9 @@ app.use(function (req, res, next) {
   );
   next();
 });
+
+const apiRequestsRouter = require("./src/routes/apiRequestsRoute");
+app.use('/api/apiRequests', apiRequestsRouter);
 
 const airQualityRouter = require("./src/routes/airQualityRoute")
 app.use('/api/airQuality', airQualityRouter);

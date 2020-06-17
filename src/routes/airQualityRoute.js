@@ -19,7 +19,9 @@ function getAirQuality(obj) {
     description: "",
   };
 
-  for (let key in obj) {
+  const {googleId, ...filteredObj} = obj;
+
+  for (let key in filteredObj) {
     if (obj.hasOwnProperty(key)) {
       if (obj[key] > airQualityData.value) {
         airQualityData.value = obj[key];

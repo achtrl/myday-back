@@ -13,3 +13,13 @@ GET http://localhost:8080/api/events
 
 GET http://localhost:8080/api/user
 ?googleId=109060792014143726304
+
+###
+
+POST http://localhost:8080/api/apiRequests
+content-type: application/json
+
+{
+    "googleId": "109060792014143726304",
+}
+
