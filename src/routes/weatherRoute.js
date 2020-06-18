@@ -7,8 +7,8 @@ const outfits = require("../models/outfits")
 
 router.get("/", async (req, res) => {
     try {
-        const weatherData = await weather.find();
-        const finalWeather = getData(weatherData[0].toJSON());
+        const weatherData = await weather.findOne({googleId: req.query.googleId});
+        const finalWeather = getData(weatherData.toJSON());
         res.json(finalWeather);
     } catch (err) {
         res.status(500).json({ message: err.message });

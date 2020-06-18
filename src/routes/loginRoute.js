@@ -4,6 +4,7 @@ const GoogleUtil = require("../google-util");
 
 const userModel = require("../models/user");
 const user = require("../models/user");
+const { google } = require("googleapis");
 
 const googleUtil = new GoogleUtil();
 
@@ -24,7 +25,6 @@ router.post("/", (req, res) => {
       }
       return data;
     })
-
     .then(async (data) => {
       userData.googleId = data[0].id;
 
@@ -50,7 +50,18 @@ router.post("/", (req, res) => {
       await userModel.findOneAndUpdate(filter, update, {
         upsert: true
       });
+
+      res.json({
+        googleId: userData.googleId,
+        first_name: userData.first_name
+      });
     })
+    .catch((err) => {
+      console.log(err);
+    })
+  })
+  .catch((err) => {
+    console.log(err);
   });
 });
 
