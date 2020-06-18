@@ -10,16 +10,24 @@ const weather = require("../models/weather");
 
 router.get("/", async (req, res) => {
   try {
-    const directionsData = await directions.findOne({googleId: req.query.googleId});
-    const userData = await user.findOne({googleId: req.query.googleId});
-    const weatherData = await weather.findOne({googleId: req.query.googleId});
+    const directionsData = await directions.findOne({ googleId: req.query.googleId });
+    const userData = await user.findOne({ googleId: req.query.googleId });
+    const weatherData = await weather.findOne({ googleId: req.query.googleId });
     const airQualityData = await getAirQualityData(req.query.googleId);
-    const finalDirections = getData(
-      directionsData.toJSON(),
-      userData.toJSON(),
-      weatherData.toJSON(),
-      airQualityData.description
-    );
+    var finalDirections = ''
+    if (directionsData.toJSON().driving.distance_text == 0) {
+      finalDirections = 'Votre évenement n\'a pas de destination'
+    }
+    else {
+      finalDirections = getData(
+        directionsData.toJSON(),
+        userData.toJSON(),
+        weatherData.toJSON(),
+        airQualityData.description
+      );
+
+    }
+
     res.json(finalDirections);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -100,11 +108,11 @@ function getFinalDirection(
     const weatherProfile = getWeatherProfile(weatherData, userData);
     const directionsProfile = getDirectionsProfile(directionsData);
     switch (
-      directionsProfile +
-      "-" +
-      typeOfProfile(weatherProfile) +
-      "-" +
-      airQualityData
+    directionsProfile +
+    "-" +
+    typeOfProfile(weatherProfile) +
+    "-" +
+    airQualityData
     ) {
       // court
 
@@ -124,7 +132,7 @@ function getFinalDirection(
         return "Nous vous conseillons de prendre la voiture";
 
       case "court-rain-bonne":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons d'y aller à pied";
 
       case "court-clear-mauvaise":
         return "Nous vous conseillons d'y aller à pied";
@@ -167,7 +175,7 @@ function getFinalDirection(
       // long
 
       default:
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture, car le trajet est long";
     }
   }
 }

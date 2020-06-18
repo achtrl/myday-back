@@ -29,7 +29,7 @@ const weather = (googleId) => {
     .then(async (data) => {
       var hourlyData = [];
       hourCurrent = data.current.dt;
-      for (const i in data.hourly) {
+      for (var i = 0;i<24;i++) {
         hour = data.hourly[i].dt;
         hourlyData.push({
           time: hour != undefined ? timeConverterNumber(hour) : 0,

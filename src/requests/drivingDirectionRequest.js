@@ -7,7 +7,7 @@ async function getDrivingDirection(googleId) {
     .get("https://maps.googleapis.com/maps/api/directions/json", {
       params: {
         origin: `${user.latitude},${user.longitude}`,
-        destination: "marcq_en_baroeul",
+        destination: `${user.events[0].location}`,
         mode: "driving",
         departure_time: "now",
         key: "AIzaSyAlxisiJ5GgjtoqabOef6WSuTUOl2d4vDk",
