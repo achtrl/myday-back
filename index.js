@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 const app = express();
 
@@ -10,7 +10,7 @@ mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-mongoose.set('useFindAndModify', false);
+mongoose.set("useFindAndModify", false);
 const db = mongoose.connection;
 db.on("error", (err) => {
   console.log(err);
@@ -31,22 +31,23 @@ app.use(function (req, res, next) {
 });
 
 const apiRequestsRouter = require("./src/routes/apiRequestsRoute");
-app.use('/api/apiRequests', apiRequestsRouter);
+app.use("/api/apiRequests", apiRequestsRouter);
 
-const airQualityRouter = require("./src/routes/airQualityRoute")
-app.use('/api/airQuality', airQualityRouter);
+const airQualityModule = require("./src/routes/airQualityRoute");
+const airQualityRouter = airQualityModule.router;
+app.use("/api/airQuality", airQualityRouter);
 
-const weatherRouter = require("./src/routes/weatherRoute")
-app.use('/api/weather', weatherRouter);
+const weatherRouter = require("./src/routes/weatherRoute");
+app.use("/api/weather", weatherRouter);
 
 const loginRouter = require("./src/routes/loginRoute");
 app.use("/api/login", loginRouter);
 
-const eventsRouter = require('./src/routes/eventsRoute');
+const eventsRouter = require("./src/routes/eventsRoute");
 app.use("/api/events", eventsRouter);
 
-const userRouter = require('./src/routes/userRoute');
-app.use('/api/user', userRouter);
+const directionsRouter = require("./src/routes/directionsRoute");
+app.use("/api/directions", directionsRouter);
 
 app.listen(8080, () => {
   console.log("SERVER ON");

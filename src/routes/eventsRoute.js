@@ -4,7 +4,7 @@ const userModel = require('../models/user');
 
 router.get('/', async (req, res) => {
     try {
-        const user = await userModel.findOne({id : req.query.id});
+        const user = await userModel.findOne({googleId : req.query.googleId});
         if (user === null) {
             return res.status(404).json({message: "Cannot find user"});
         }
