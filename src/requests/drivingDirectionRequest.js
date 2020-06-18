@@ -3,26 +3,22 @@ const userModel = require("../models/user");
 
 async function getDrivingDirection(googleId) {
   const user = await userModel.findOne({ googleId: googleId });
-  if (user.events.lenght > 0) {
-    return await axios
-      .get("https://maps.googleapis.com/maps/api/directions/json", {
-        params: {
-          origin: `${user.latitude},${user.longitude}`,
-          destination: `${user.events[0].location}`,
-          mode: "driving",
-          departure_time: "now",
-          key: "AIzaSyAlxisiJ5GgjtoqabOef6WSuTUOl2d4vDk",
-        },
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  } else {
-    return "Pas d'évenement prévu pour le moment !";
-  }
+  return await axios
+    .get("https://maps.googleapis.com/maps/api/directions/json", {
+      params: {
+        origin: `${user.latitude},${user.longitude}`,
+        destination: `${user.events[0].location}`,
+        mode: "driving",
+        departure_time: "now",
+        key: "AIzaSyAlxisiJ5GgjtoqabOef6WSuTUOl2d4vDk",
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 module.exports = getDrivingDirection;

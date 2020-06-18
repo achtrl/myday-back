@@ -8,6 +8,9 @@ const outfits = require("../models/outfits")
 router.get("/", async (req, res) => {
     try {
         const weatherData = await weather.findOne({googleId: req.query.googleId});
+        if (weatherData === null) {
+            return res.status(404).json({message: "Cannot find weather data."});
+          }
         const finalWeather = getData(weatherData.toJSON());
         res.json(finalWeather);
     } catch (err) {

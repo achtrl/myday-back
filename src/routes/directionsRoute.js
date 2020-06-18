@@ -11,9 +11,25 @@ const weather = require("../models/weather");
 router.get("/", async (req, res) => {
   try {
     const directionsData = await directions.findOne({ googleId: req.query.googleId });
+    if (directionsData === null) {
+      return res.status(404).json({message: "Cannot find directions data."});
+    }
+
     const userData = await user.findOne({ googleId: req.query.googleId });
+    if (userData === null) {
+      return res.status(404).json({message: "Cannot find user."});
+    }
+
     const weatherData = await weather.findOne({ googleId: req.query.googleId });
+    if (weatherData === null) {
+      return res.status(404).json({message: "Cannot find weather data."});
+    }
+
     const airQualityData = await getAirQualityData(req.query.googleId);
+    if (airQualityData === null) {
+      return res.status(404).json({message: "Cannot find air quality data."});
+    }
+
     var finalDirections = ''
     if (directionsData.toJSON().driving.distance_text == 0) {
       finalDirections = 'Votre évenement n\'a pas de destination'

@@ -12,7 +12,6 @@ const directions = async (googleId) => {
       getWalkingDirection(googleId),
       getBicyclingDirection(googleId),
     ]).then(async (values) => {
-      console.log(values);
       const dataDrivingDirection = {
         distance_text:
           values[0].routes[0] != undefined

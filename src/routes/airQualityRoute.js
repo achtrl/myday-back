@@ -6,6 +6,9 @@ const airQuality = require("../models/airQuality");
 router.get("/", async (req, res) => {
   try {
     const airQualityData = await airQuality.findOne({googleId: req.query.googleId});
+    if (airQualityData === null) {
+      return res.status(404).json({message: "Cannot find air quality data."});
+    }
     const airQualityDescription = getAirQuality(airQualityData.toJSON());
     res.json(airQualityDescription);
   } catch (err) {

@@ -3,7 +3,6 @@ const userModel = require("../models/user");
 
 async function getWalkingDirection(googleId) {
   const user = await userModel.findOne({ googleId: googleId });
-  if (user.events.length > 0) {
     return await axios
       .get("https://maps.googleapis.com/maps/api/directions/json", {
         params: {
@@ -20,9 +19,6 @@ async function getWalkingDirection(googleId) {
       .catch((error) => {
         console.log(error);
       });
-  } else {
-    return "Pas d'évenement prévu pour le moment !";
-  }
 }
 
 module.exports = getWalkingDirection;
