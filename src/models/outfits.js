@@ -13,7 +13,7 @@ const outfit = {
     windy : {
     hot : 'un t-shirt, un short, et des lunettes de soleil',
     moderate : 'une chemise, un pantalon et des mocassins',
-    cold : 'un pardessus, un jean et des chassures chaudes',
+    cold : 'un pardessus, un jean et des chaussures chaudes',
     very_cold : 'un bonnet, des gants et une écharpe, un caban et un pantalon épais'
     },
     sunny : {
