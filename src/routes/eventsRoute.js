@@ -8,7 +8,11 @@ router.get('/', async (req, res) => {
         if (user === null) {
             return res.status(404).json({message: "Cannot find user"});
         }
-        res.json(user.events);
+        let eventsData = [];
+        for (let i = 0; i < 2; i++) {
+            user.events[i] && eventsData.push(user.events[i]);
+        }
+        res.json(eventsData);
     } catch (err) {
         res.status(500).json({message: err.message});
     }
