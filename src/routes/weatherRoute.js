@@ -171,7 +171,7 @@ function getOutfit(description, temperature) {
             outfit = outfits.sunny.cold
             break
         default:
-            outfit = outfits.clear.moderate
+            outfit = outfits.sunny.moderate
             break
     }
     return outfit
