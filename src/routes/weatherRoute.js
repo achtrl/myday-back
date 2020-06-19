@@ -113,13 +113,13 @@ function rainTime(infos) {
         rainPeriod.day = true
     }
     if (rainPeriod.day == true){
-        return 'Pluie prévue toute la journée'
+        return 'De la pluie est prévue toute la journée.'
     } 
     else if (rainPeriod.morning == true){
-        return 'Pluie prévue le matin'
+        return 'De la pluie est prévue dans la matinée.'
     } 
     else if (rainPeriod.afternoon == true){
-        return 'Pluie prévue l\'après-midi'
+        return 'De la pluie est prévue dans l\'après-midi. '
     }
 
 }
