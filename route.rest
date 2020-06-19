@@ -1,15 +1,15 @@
 GET http://localhost:8080/api/airQuality
-?googleId=100075866099456609716
+?googleId=113995452378480506600
 
 ###
 
 GET http://localhost:8080/api/weather
-?googleId=100075866099456609716
+?googleId=113995452378480506600
 
 ###
 
 GET http://localhost:8080/api/events
-?googleId=100075866099456609716
+?googleId=113995452378480506600
 
 
 ###
@@ -18,10 +18,10 @@ POST http://localhost:8080/api/apiRequests
 content-type: application/json
 
 {
-    "googleId": "100075866099456609716",
+    "googleId": "113995452378480506600",
 }
 
 ###
 
 GET http://localhost:8080/api/directions
-?googleId=100075866099456609716
+?googleId=113995452378480506600

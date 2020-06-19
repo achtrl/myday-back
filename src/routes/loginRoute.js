@@ -8,6 +8,14 @@ const { google } = require("googleapis");
 
 const googleUtil = new GoogleUtil();
 
+function dateConverter(notConverted) {
+  const dateNotConverted = new Date(notConverted);
+  const hours = dateNotConverted.getHours();
+  const minutes = "0" + dateNotConverted.getMinutes();
+  const dateConverted = `${hours}` + ':' + `${minutes.substr(-2)}`
+  return dateConverted
+}
+
 router.get("/", (req, res) => {
   res.send(googleUtil.urlGoogle());
 });
@@ -38,7 +46,7 @@ router.post("/", (req, res) => {
         events.push({
           summary: event.summary,
           location: event.location,
-          start: event.start.dateTime
+          start: dateConverter(event.start.dateTime)
         })
       }
       userData.events = events;
