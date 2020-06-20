@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 
     var finalDirections = ''
     if (directionsData.toJSON().driving.distance_text == 0) {
-      finalDirections = 'Votre évenement n\'a pas de destination'
+      finalDirections = 'Votre évenement n\'a pas de localisation.'
     }
     else {
       finalDirections = getData(
@@ -115,7 +115,7 @@ function getFinalDirection(
 ) {
   var size = Object.keys(possibleDirections).length;
   if (size == 0) {
-    return "Trop tard";
+    return "Il est trop tard pour vous y rendre.";
   } else if (size == 1) {
     if (possibleDirections.driving) {
       return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
@@ -215,7 +215,7 @@ function typeOfProfile(x) {
 function findTimeToStart(directionsData, userData, weatherData, airQualityData) {
   const date = new Date(getEventTime(userData))
   const finalDirection = getData(directionsData, userData, weatherData, airQualityData.description)
-  if (finalDirection == "Pas d'évenements à venir") {
+  if (finalDirection == "Il est trop tard pour vous y rendre.") {
     return ''
   }
   else {
