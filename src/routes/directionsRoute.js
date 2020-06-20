@@ -12,22 +12,22 @@ router.get("/", async (req, res) => {
   try {
     const directionsData = await directions.findOne({ googleId: req.query.googleId });
     if (directionsData === null) {
-      return res.status(404).json({message: "Cannot find directions data."});
+      return res.status(404).json({ message: "Cannot find directions data." });
     }
 
     const userData = await user.findOne({ googleId: req.query.googleId });
     if (userData === null) {
-      return res.status(404).json({message: "Cannot find user."});
+      return res.status(404).json({ message: "Cannot find user." });
     }
 
     const weatherData = await weather.findOne({ googleId: req.query.googleId });
     if (weatherData === null) {
-      return res.status(404).json({message: "Cannot find weather data."});
+      return res.status(404).json({ message: "Cannot find weather data." });
     }
 
     const airQualityData = await getAirQualityData(req.query.googleId);
     if (airQualityData === null) {
-      return res.status(404).json({message: "Cannot find air quality data."});
+      return res.status(404).json({ message: "Cannot find air quality data." });
     }
 
     var finalDirections = ''
@@ -44,10 +44,14 @@ router.get("/", async (req, res) => {
 
     }
 
-    res.json(finalDirections);
+    const timeToStart = findTimeToStart(directionsData, userData, weatherData, airQualityData)
+    const finalTransportData = finalData(finalDirections,timeToStart)
+    res.json(finalTransportData);
+    
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+
 });
 
 function getRemainingTime(userData) {
@@ -114,11 +118,11 @@ function getFinalDirection(
     return "Trop tard";
   } else if (size == 1) {
     if (possibleDirections.driving) {
-      return "Nous vous conseillons de prendre la voiture";
+      return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
     } else if (possibleDirections.biclycling) {
-      return "Nous vous conseillons de prendre le vélo";
+      return "Nous vous conseillons de prendre le vélo pour vous y rendre.";
     } else {
-      return "Nous vous conseillons d'y aller à pied";
+      return "Nous vous conseillons d'y aller à pied pour vous y rendre.";
     }
   } else {
     const weatherProfile = getWeatherProfile(weatherData, userData);
@@ -133,65 +137,65 @@ function getFinalDirection(
       // court
 
       case "court-snow-mauvaise":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "court-snow-moyenne":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "court-snow-bonne":
-        return "Nous vous conseillons d'y aller à pied";
+        return "Nous vous conseillons d'y aller à pied pour vous y rendre.";
 
       case "court-rain-mauvaise":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "court-rain-moyenne":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "court-rain-bonne":
-        return "Nous vous conseillons d'y aller à pied";
+        return "Nous vous conseillons d'y aller à pied pour vous y rendre.";
 
       case "court-clear-mauvaise":
-        return "Nous vous conseillons d'y aller à pied";
+        return "Nous vous conseillons d'y aller à pied pour vous y rendre.";
 
       case "court-clear-moyenne":
-        return "Nous vous conseillons d'y aller à pied";
+        return "Nous vous conseillons d'y aller à pied pour vous y rendre.";
 
       case "court-clear-bonne":
-        return "Nous vous conseillons d'y aller à pied";
+        return "Nous vous conseillons d'y aller à pied pour vous y rendre.";
 
       // moyen
 
       case "moyen-snow-mauvaise":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "moyen-snow-moyenne":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "moyen-snow-bonne":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "moyen-rain-mauvaise":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "moyen-rain-moyenne":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "moyen-rain-bonne":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "moyen-clear-mauvaise":
-        return "Nous vous conseillons de prendre la voiture";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
 
       case "moyen-clear-moyenne":
-        return "Nous vous conseillons de prendre le vélo";
+        return "Nous vous conseillons de prendre le vélo pour vous y rendre.";
 
       case "moyen-clear-bonne":
-        return "Nous vous conseillons de prendre le vélo";
+        return "Nous vous conseillons de prendre le vélo pour vous y rendre.";
 
       // long
 
       default:
-        return "Nous vous conseillons de prendre la voiture, car le trajet est long";
+        return "Nous vous conseillons de prendre la voiture pour vous y rendre.";
     }
   }
 }
@@ -205,6 +209,34 @@ function typeOfProfile(x) {
     return "clear";
   }
 }
+
+
+
+function findTimeToStart(directionsData, userData, weatherData, airQualityData) {
+  const date = new Date(getEventTime(userData))
+  const finalDirection = getData(directionsData, userData, weatherData, airQualityData.description)
+  if (finalDirection == "Pas d'évenements à venir") {
+    return ''
+  }
+  else {
+    if (finalDirection.includes("voiture")) {
+      var travelTime = directionsData.driving.duration_value
+    }
+    else if (finalDirection.includes("pied")) {
+      var travelTime = directionsData.walking.duration_value
+    }
+    else if (finalDirection.includes("vélo")) {
+      var travelTime = directionsData.bicycling.duration_value
+    }
+    const newEventTime = date - Math.round((travelTime + 5) * 60000);
+    const newDate = new Date(newEventTime);
+    const hours = newDate.getHours();
+    const minutes = "0" + newDate.getMinutes();
+    const heure = hours + ":" + minutes.substr(-2);
+    return heure;
+  }
+}
+
 
 function getWeatherProfile(weatherData, userData) {
   var eventTime = getEventTime(userData);
@@ -221,7 +253,7 @@ function getData(directionsData, userData, weatherData, airQualityData) {
   if (remainingTime != -1) {
     possibleDirections = getPossibleDirections(remainingTime, directionsData);
   } else {
-    return "Pas d'évenements à venir";
+    return "Pas de trajet à déterminer pour le moment.";
   }
   const finalDirection = getFinalDirection(
     possibleDirections,
@@ -231,6 +263,13 @@ function getData(directionsData, userData, weatherData, airQualityData) {
     directionsData
   );
   return finalDirection;
+}
+
+function finalData(finalDirections,timeToStart){
+  return data = {
+    transport : finalDirections,
+    timeToStart : timeToStart
+  }
 }
 
 module.exports = router;
