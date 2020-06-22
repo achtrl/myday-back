@@ -199,11 +199,17 @@ function getFrenchDescription(description, wind_speed) {
         case "Snow":
             return 'enneigé'
         case "Clear":
-            return 'ensoleillé'
+            return 'dégagé'
         case "Rain":
             return 'pluvieux'
+        case "Thunderstorm" :
+            return "orageux"
+        case "Drizzle" :
+            return "bruineux"
+        case "Clouds":
+            return "nuageux"
         default:
-            return 'ensoleillé'
+            return "dégagé"
     }
 }
 
