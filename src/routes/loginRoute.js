@@ -4,6 +4,7 @@ const GoogleUtil = require("../google-util");
 const userModel = require("../models/user");
 const googleUtil = new GoogleUtil();
 
+// Request google about the users's basics info + events
 router.get("/", (req, res) => {
   res.send(googleUtil.urlGoogle());
 });

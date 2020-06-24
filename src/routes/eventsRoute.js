@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userModel = require("../models/user");
-
+// Getting event infos from the DB
 router.get("/", async (req, res) => {
   try {
     const user = await userModel.findOne({ googleId: req.query.googleId });
@@ -19,6 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Return the hour in a 'hh:mm' format from a Date type
 function dateConverter(notConverted) {
   const dateNotConverted = new Date(notConverted);
   const hours = dateNotConverted.getHours();

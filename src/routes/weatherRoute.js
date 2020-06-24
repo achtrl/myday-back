@@ -3,7 +3,7 @@ const router = express.Router();
 const weather = require("../models/weather");
 const outfits = require("../models/outfits")
 
-// Getting weather infos
+// Getting weather infos from the DB
 
 router.get("/", async (req, res) => {
     try {
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-
+// Return a list of temperature from the hourly 
 function getTemperature(obj) {
     var temperatures = []
     var i = 0
@@ -30,6 +30,7 @@ function getTemperature(obj) {
 
 }
 
+// return the mean of a list
 function mean(data) {
     var mean = 0
     for (value of data) {
@@ -39,6 +40,7 @@ function mean(data) {
 
 }
 
+// return an object with info on the weather (wind-speed, weather-main and the time)
 function getWeatherDescription(obj) {
     var descriptions = {
         wind_speed: [],
@@ -54,6 +56,7 @@ function getWeatherDescription(obj) {
     return descriptions
 }
 
+// Return an object with the weather main and an array of raining hours
 function getMainWeatherDescription(infos) {
     var data = {
         weather_main: '',
@@ -80,6 +83,8 @@ function getMainWeatherDescription(infos) {
     }
     return data
 }
+
+// Return a description of temperature according to it
 function getTemperatureDescription(temperature) {
     if (temperature > 20) {
         return 'Hot'
@@ -95,6 +100,7 @@ function getTemperatureDescription(temperature) {
     }
 }
 
+// Return a prediction on the raining period of the day
 function rainTime(infos) {
     var rainPeriod = {
         morning: false,
@@ -124,7 +130,7 @@ function rainTime(infos) {
 
 }
 
-
+// return the best suited outfit according to the weather and the temperature
 function getOutfit(description, temperature) {
     var outfit = ''
     switch (description.weather_main + "-" + temperature) {
@@ -177,6 +183,7 @@ function getOutfit(description, temperature) {
     return outfit
 }
 
+// Use all fonction above and return the rain prediction and the advised outfit
 function getFinalOutfit(weatherData) {
     const outfitAndPrediction = {}
     const temperatures = getTemperature(weatherData)
@@ -191,6 +198,8 @@ function getFinalOutfit(weatherData) {
 
     return outfitAndPrediction
 }
+
+// Translate the current weather main in french 
 function getFrenchDescription(description, wind_speed) {
     if (wind_speed > 14) {
         return 'venteux'
@@ -213,6 +222,7 @@ function getFrenchDescription(description, wind_speed) {
     }
 }
 
+// Return an object with weather infos
 function getData(weatherData) {
     const outfitAndPrediction = getFinalOutfit(weatherData)
     return data = {

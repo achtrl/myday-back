@@ -6,7 +6,7 @@ const airQualityModule = require("./airQualityRoute");
 const getAirQualityData = airQualityModule.getAirQualityData;
 const weather = require("../models/weather");
 
-// Getting transport infos
+// Getting transport infos from the DB
 
 router.get("/", async (req, res) => {
   try {
@@ -54,6 +54,7 @@ router.get("/", async (req, res) => {
 
 });
 
+// return the remaining time before the start of an event in the user's calendar
 function getRemainingTime(userData) {
   var remainingTime = 0;
   for (var i = 0; i < userData.events.length; i++) {
@@ -67,6 +68,7 @@ function getRemainingTime(userData) {
   return -1;
 }
 
+// Return the time of the next event in the user's calendar
 function getEventTime(userData) {
   var remainingTime = 0;
   for (var i = 0; i < userData.events.length; i++) {
@@ -80,6 +82,7 @@ function getEventTime(userData) {
   return -1;
 }
 
+// Return what means of transport can be used to go to the next event
 function getPossibleDirections(remainingTime, directionsData) {
   var possibleDirections = {};
   if (remainingTime >= Math.round(directionsData.driving.duration_value * 60)) {
@@ -96,6 +99,7 @@ function getPossibleDirections(remainingTime, directionsData) {
   return possibleDirections;
 }
 
+// Return the lenght of the journey
 function getDirectionsProfile(directionsData) {
   if (Math.round(directionsData.walking.duration_value) <= 15) {
     return "court";
@@ -106,6 +110,7 @@ function getDirectionsProfile(directionsData) {
   }
 }
 
+// return the optimal transport to go to the next event
 function getFinalDirection(
   possibleDirections,
   airQualityData,
@@ -200,6 +205,7 @@ function getFinalDirection(
   }
 }
 
+// Adapt the weather info from the api to our algorithm
 function typeOfProfile(x) {
   if (x == "Rain" || x == "Drizzle" || x == "Thunderstorm") {
     return "rain";
@@ -210,8 +216,7 @@ function typeOfProfile(x) {
   }
 }
 
-
-
+// Return the advised time to leave for the next event
 function findTimeToStart(directionsData, userData, weatherData, airQualityData) {
   const date = new Date(getEventTime(userData))
   const finalDirection = getData(directionsData, userData, weatherData, airQualityData.description)
@@ -237,7 +242,7 @@ function findTimeToStart(directionsData, userData, weatherData, airQualityData) 
   }
 }
 
-
+//  Return the weather during and right before the event 
 function getWeatherProfile(weatherData, userData) {
   var eventTime = getEventTime(userData);
   var eventHour = eventTime.getHours();
@@ -246,7 +251,7 @@ function getWeatherProfile(weatherData, userData) {
   const remainingHours = eventHour - nowHour;
   return weatherData.hourly[remainingHours].weather_infos[0].weather_main;
 }
-
+// Use all fonctions to return the best suited transport for the next event and when to leave
 function getData(directionsData, userData, weatherData, airQualityData) {
   const remainingTime = getRemainingTime(userData);
   var possibleDirections = {};
@@ -265,6 +270,7 @@ function getData(directionsData, userData, weatherData, airQualityData) {
   return finalDirection;
 }
 
+// Return an object with the transport and the time of departure
 function finalData(finalDirections,timeToStart){
   return data = {
     transport : finalDirections,

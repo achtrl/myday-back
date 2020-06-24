@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const airQuality = require("../models/airQuality");
 
-// Getting air quality infos
+// Getting air quality infos from the DataBase
 router.get("/", async (req, res) => {
   try {
     const airQualityData = await airQuality.findOne({googleId: req.query.googleId});
@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Process the air quality info and return the highest index
 function getAirQuality(obj) {
   var airQualityData = {
     value: 0,
@@ -44,6 +45,7 @@ function getAirQuality(obj) {
   return airQualityData;
 }
 
+// Return the processed info in the route
 async function sendData(googleId) {
   const airQualityData = await airQuality.find({googleId: googleId});
   const airQualityDescription = getAirQuality(airQualityData);

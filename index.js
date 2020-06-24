@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+// Connect to the DB
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
