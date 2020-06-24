@@ -1,6 +1,6 @@
 var axios = require("axios");
 const userModel = require("../models/user");
-
+// Ask the google maps api about the info on the journey (Car)
 async function getDrivingDirection(googleId) {
   const user = await userModel.findOne({ googleId: googleId });
   return await axios

@@ -1,7 +1,7 @@
 var axios = require("axios");
 const userModel = require("../models/user");
 const weatherModel = require("../models/weather");
-
+ // Request to the api for the weather info on the user's location
 async function getWeather(googleId) {
   const user = await userModel.findOne({googleId : googleId});
   return await axios
@@ -20,8 +20,8 @@ async function getWeather(googleId) {
       console.log(error);
     });
 }
-
-const weather = (googleId) => {
+// Stock the desired info in the DB
+const weather = (googleId) => {  
   getWeather(googleId)
     .then((response) => {
       return response;
@@ -56,7 +56,7 @@ const weather = (googleId) => {
         });
       }
 
-      const dataWeather = {
+      const dataWeather = {  
         googleId: googleId,
         current: {
           time: hourCurrent != undefined ? timeConverterString(hourCurrent) : 0,
@@ -99,20 +99,20 @@ const weather = (googleId) => {
 };
 
 // Utilities
-
-function timeConverterString(unix_time) {
+// convert a unix time in a hh:mm string format
+function timeConverterString(unix_time) { 
   var date = new Date(unix_time * 1000);
   var hours = date.getHours();
   var minutes = "0" + date.getMinutes();
   var formattedTime = hours + ":" + minutes.substr(-2);
   return formattedTime;
 }
-
-function timeConverterNumber(unix_time) {
+// return the hour in a number from a unix time
+function timeConverterNumber(unix_time) { 
   var date = new Date(unix_time * 1000);
   var hours = date.getHours();
   var formattedTime = hours;
   return formattedTime;
 }
-
 module.exports = weather;
+

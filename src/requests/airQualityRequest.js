@@ -1,8 +1,8 @@
 var axios = require("axios");
 const userModel = require("../models/user");
 const airQualityModel = require("../models/airQuality");
-
-async function getAirQuality(googleId) {
+// Ask the api for the airQuality info on the user's location
+async function getAirQuality(googleId) { 
   const user = await userModel.findOne({googleId : googleId});
   return await axios
     .get(
@@ -19,8 +19,8 @@ async function getAirQuality(googleId) {
       console.log(error);
     });
 }
-
-const airQuality = (googleId) => {
+// Stock the desired info in the DB
+const airQuality = (googleId) => { 
   getAirQuality(googleId)
     .then((response) => {
       return response.data;

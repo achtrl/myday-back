@@ -3,7 +3,7 @@ const getBicyclingDirection = require("./bicyclingDirectionRequest");
 const getWalkingDirection = require("./walkingDirectionRequest");
 const getDrivingDirection = require("./drivingDirectionRequest");
 const userModel = require("../models/user");
-
+// Stock the desired info in the DB about all the possible journey
 const directions = async (googleId) => {
   const user = await userModel.findOne({ googleId: googleId });
   if (user.events.length > 0) {
