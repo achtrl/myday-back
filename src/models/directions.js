@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 
 const directionsDataSchema = mongoose.Schema({
-  distance_text: String,
   distance_km: Number,
-  duration_text: String,
   duration_value: Number,
   start_adress: String,
   end_adress: String,

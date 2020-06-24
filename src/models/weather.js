@@ -8,12 +8,8 @@ const weatherInfosSchema = new Schema({
 
 const weatherDataSchema = new Schema({
   time: String,
-  sunrise: String,
-  sunset: String,
   temp: Number,
   feels_like: Number,
-  pressure: Number,
-  humidity: Number,
   wind_speed: Number,
   weather_infos: [weatherInfosSchema],
 });
